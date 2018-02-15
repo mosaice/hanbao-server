@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from './User';
 @Entity()
 export class UserNotification {
   @PrimaryGeneratedColumn({
@@ -25,4 +25,8 @@ export class UserNotification {
     comment: '操作动作'
   })
   action: string;
+
+  /* 用户关系 */
+  @ManyToOne(type => User, user => user.notifications)
+  user: User
 }

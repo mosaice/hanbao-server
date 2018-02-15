@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { UserChannelMessage } from './UserChannelMessage';
 
 @Entity()
-export class UserNotification {
+export class ChatMessage {
   @PrimaryGeneratedColumn({
     comment: '消息id'
   })
@@ -12,4 +13,7 @@ export class UserNotification {
     comment: '消息内容'
   })
   content: string;
+
+  @ManyToOne(type => UserChannelMessage, belong => belong.messages)
+  belong: UserChannelMessage
 }

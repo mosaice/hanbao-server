@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from './User';
 
 @Entity()
 export class UserHistory {
@@ -8,7 +9,7 @@ export class UserHistory {
   })
   id: number;
 
-  @Column({
+  @Column('enum', {
     enum: ['user', 'group', 'post'],
     comment: '操作对象'
   })
@@ -25,6 +26,10 @@ export class UserHistory {
     comment: '操作动作'
   })
   action: string;
+
+  /* 用户历史记录关系 */
+  @ManyToOne(type => User, user => user.histories)
+  user: User
 
 
 

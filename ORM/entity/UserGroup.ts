@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Post } from './Post';
 
 @Entity()
 export class UserGroup {
@@ -8,9 +9,9 @@ export class UserGroup {
   })
   id: number;
 
-  @Column({
+  @Column('enum', {
     enum: ['public', 'private'],
-    default: 'public',    
+    default: 'public',
     comment: '浏览权限'
   })
   viewPermission: string;
@@ -26,5 +27,9 @@ export class UserGroup {
     comment: '用户组描述'    
   })
   description: string;
+
+  /* 文章归属 */
+  @OneToMany(type => Post, post => post.owner)
+  posts: Post[];
 
 }

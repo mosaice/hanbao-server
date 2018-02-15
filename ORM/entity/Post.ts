@@ -1,4 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
+import { UserGroup } from './UserGroup';
+import { Comment } from './Comment';
+import { PostAppend } from './PostAppend';
+import { PostTags } from './PostTags';
 
 @Entity()
 export class Post {
@@ -27,9 +31,9 @@ export class Post {
   })
   viewCount: number;
 
-  @Column({
+  @Column('enum', {
     enum: ['public', 'private', 'protect'],
-    default: 'public',    
+    default: 'public',
     comment: '浏览权限'
   })
   viewPermission: string;
@@ -39,5 +43,21 @@ export class Post {
     comment: '文章默认图'
   })
   banner: string;
+
+  /* 文章归属 */
+  @ManyToOne(type => UserGroup, group => group.posts)
+  owner: UserGroup
+
+
+  /* 文章评论关联 */
+  @OneToMany(type => Comment, comment => comment.post)
+  comments: Comment[]
+
+  /* 文章追加关联 */
+  @OneToMany(type => PostAppend, append => append.post)
+  appends: PostAppend[]
+
+  @ManyToMany(type => PostTags, tag => tag.posts)
+  tags: PostTags[]
 
 }

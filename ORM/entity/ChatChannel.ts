@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { UserChannelMessage } from './UserChannelMessage';
+
+enum booleanEnum {
+  TRUE = 1,
+  FALSE = 0
+}
 
 @Entity()
 export class ChatChannel {
@@ -15,10 +21,13 @@ export class ChatChannel {
   })
   name: string;
 
-  @Column({
-    enum: [true, false],
-    default: true,
+  @Column('enum', {
+    enum: booleanEnum,
     comment: '是否是固定频道'
   })
-  fixable: boolean;
+  fixable: number;
+
+  /* 用户频道定位关联 */
+  @OneToMany(type => UserChannelMessage, userAndChannel => userAndChannel.channel)
+  messageBelongs: UserChannelMessage[]
 }

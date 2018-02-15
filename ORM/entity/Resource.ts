@@ -8,7 +8,7 @@ export class Resource {
   })
   id: number;
 
-  @Column({
+  @Column('enum', {
     enum: ['view', 'access', 'update', 'delete'],
     comment: '资源类型'
   })

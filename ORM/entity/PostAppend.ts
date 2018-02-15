@@ -1,4 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Post } from './Post';
 
 @Entity()
 export class PostAppend {
@@ -13,4 +14,9 @@ export class PostAppend {
     comment: '追加内容'
   })
   content: string;
+
+  /* 追加内容和文章关联关系 */
+  @ManyToOne(type => Post, post => post.comments)
+  post: Post
+
 }

@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from './User';
 
 @Entity()
 export class UserBlock {
@@ -8,9 +9,8 @@ export class UserBlock {
   })
   id: number;
 
-  @Column({
+  @Column('enum', {
     enum: ['user', 'group', 'ohter'],
-    default: 'ohter',
     comment: '屏蔽类型'
   })
   type: string;
@@ -19,5 +19,9 @@ export class UserBlock {
     comment: '屏蔽的id'
   })
   blockId: number;
+
+  /* 用户屏蔽关联 */
+  @ManyToOne(type => User, user => user.blocks)
+  user: User
 
 }
