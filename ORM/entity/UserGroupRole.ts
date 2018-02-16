@@ -1,4 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { User } from './User';
+import { UserGroup } from './UserGroup';
+import { Role } from './Role';
 
 @Entity()
 export class UserGroupRole {
@@ -8,5 +11,13 @@ export class UserGroupRole {
   })
   id: number;
 
+  @ManyToOne(type => User, user => user.groupRoles)
+  user: User
+
+  @ManyToOne(type => UserGroup, group => group.userRoles)
+  group: UserGroup
+
+  @ManyToOne(type => Role, role => role.userAndGroups)
+  role: Role
 
 }

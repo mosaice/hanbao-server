@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Post } from './Post';
+import { UserGroupRole } from './UserGroupRole';
 
 @Entity()
 export class UserGroup {
@@ -31,5 +32,9 @@ export class UserGroup {
   /* 文章归属 */
   @OneToMany(type => Post, post => post.owner)
   posts: Post[];
+
+  /* 文章归属 */
+  @OneToMany(type => UserGroupRole, userRole => userRole.group)
+  userRoles: UserGroupRole[];
 
 }

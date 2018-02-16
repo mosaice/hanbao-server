@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Role } from './Role';
 
 @Entity()
 export class Resource {
@@ -27,4 +28,8 @@ export class Resource {
     comment: '资源具体名称'
   })
   name: string;
+
+  @ManyToMany(type => Role, role => role.resouces)
+  @JoinTable()
+  roles: Role[]
 }

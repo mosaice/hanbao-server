@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToMany } from 'typeorm';
 import { AdminUser } from './AdminUser';
 import { Comment } from './Comment';
 import { UserHistory } from './UserHistory';
@@ -6,6 +6,8 @@ import { UserBlock } from './UserBlock';
 import { UserSubscribe } from './UserSubscribe';
 import { UserNotification } from './UserNotification';
 import { UserChannelMessage } from './UserChannelMessage';
+import { UserGroupRole } from './UserGroupRole';
+import { Post } from './Post';
 
 @Entity()
 export class User {
@@ -88,6 +90,16 @@ export class User {
   /* 用户频道定位关联 */
   @OneToMany(type => UserChannelMessage, userAndChannel => userAndChannel.user)
   messageBelongs: UserChannelMessage[]
+
+  /* 用户频道定位关联 */
+  @OneToMany(type => UserGroupRole, groupRoles => groupRoles.user)
+  groupRoles: UserGroupRole[]
+
+  @ManyToMany(type => Post, post => post.likedUsers)
+  likedPosts: Post[]
+
+  @ManyToMany(type => Post, post => post.dislikedUsers)
+  dislikedPosts: Post[]
 
 
 }

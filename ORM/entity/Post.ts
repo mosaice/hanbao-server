@@ -3,6 +3,7 @@ import { UserGroup } from './UserGroup';
 import { Comment } from './Comment';
 import { PostAppend } from './PostAppend';
 import { PostTags } from './PostTags';
+import { User } from './User';
 
 @Entity()
 export class Post {
@@ -59,5 +60,11 @@ export class Post {
 
   @ManyToMany(type => PostTags, tag => tag.posts)
   tags: PostTags[]
+
+  @ManyToMany(type => User, user => user.likedPosts)
+  likedUsers: User[]
+
+  @ManyToMany(type => User, user => user.dislikedPosts)
+  dislikedUsers: User[]
 
 }
