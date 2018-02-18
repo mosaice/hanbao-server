@@ -1,15 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToMany, OneToMany, OneToOne, JoinColumn, Index } from 'typeorm';
 import { Resource } from './Resource';
 import { UserGroupRole } from './UserGroupRole';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
 
 
 @Entity()
-export class Role {
-  @PrimaryGeneratedColumn({
-    comment: '角色id'
-  })
-  id: number;
-
+export class Role extends BaseEntity {
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(30)
+  @Index({ unique: true })
   @Column({
     type: 'varchar',
     length: 30,

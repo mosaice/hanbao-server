@@ -1,14 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { Entity, Column, ManyToMany, JoinTable, Index } from "typeorm";
 import { Post } from './Post';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
 
 @Entity()
-export class PostTags {
+export class PostTags extends BaseEntity {
 
-  @PrimaryGeneratedColumn({
-    comment: '文章标签id'
-  })
-  id: number;
-
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(50)
+  @Index({ unique: true })
   @Column({
     type: 'varchar',
     length: 50,

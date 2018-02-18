@@ -1,20 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { User } from './User';
+import { IsPositive, IsIn } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
 
 @Entity()
-export class UserBlock {
+export class UserBlock extends BaseEntity {
 
-  @PrimaryGeneratedColumn({
-    comment: '屏蔽项id'
-  })
-  id: number;
-
+  @IsIn(['user', 'group', 'ohter'])
   @Column('enum', {
     enum: ['user', 'group', 'ohter'],
     comment: '屏蔽类型'
   })
   type: string;
 
+  @IsPositive()
   @Column({
     comment: '屏蔽的id'
   })

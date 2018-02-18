@@ -1,12 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { User } from './User';
-@Entity()
-export class UserNotification {
-  @PrimaryGeneratedColumn({
-    comment: '消息id'
-  })
-  id: number;
+import { IsNotEmpty, IsString, MaxLength, IsPositive } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
 
+@Entity()
+export class UserNotification extends BaseEntity {
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(30)
   @Column({
     type: 'varchar',
     length: 30,
@@ -14,11 +16,15 @@ export class UserNotification {
   })
   type: string;
 
+  @IsPositive()
   @Column({
     comment: '消息来源'
   })
   sourceId: number;
 
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(30)
   @Column({
     type: 'varchar',
     length: 30,

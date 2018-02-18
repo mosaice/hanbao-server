@@ -1,15 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
+import { Entity, Column, ManyToOne, OneToMany } from "typeorm";
 import { User } from './User';
 import { Post } from './Post';
+import { IsString } from 'class-validator';
+import { BaseEntity } from './BaseEnity';
 
 @Entity()
-export class Comment {
+export class Comment extends BaseEntity {
 
-  @PrimaryGeneratedColumn({
-    comment: '评论id'
-  })
-  id: number;
 
+  @IsString()
   @Column({
     type: 'text',
     comment: '评论内容'

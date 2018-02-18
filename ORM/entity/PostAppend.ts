@@ -1,14 +1,13 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {Entity, Column, ManyToOne } from "typeorm";
 import { Post } from './Post';
+import { IsNotEmpty, IsString } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
 
 @Entity()
-export class PostAppend {
+export class PostAppend extends BaseEntity {
 
-  @PrimaryGeneratedColumn({
-    comment: '评论id'
-  })
-  id: number;
-
+  @IsNotEmpty()
+  @IsString()
   @Column({
     type: 'text',
     comment: '追加内容'

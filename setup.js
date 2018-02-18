@@ -1,0 +1,1 @@
+global.authKey = "noKevpTnCjVZdIkQ8EiuQIV1FYv27K76KgiN7U0mn7c859yKBENJjRKwdeUA22oA";

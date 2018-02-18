@@ -1,25 +1,28 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { User } from './User';
+import { IsNotEmpty, IsString, MaxLength, IsIn, IsPositive } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
+
 
 @Entity()
-export class UserHistory {
+export class UserHistory extends BaseEntity {
 
-  @PrimaryGeneratedColumn({
-    comment: '历史操作id'
-  })
-  id: number;
-
+  @IsIn(['user', 'group', 'post'])
   @Column('enum', {
     enum: ['user', 'group', 'post'],
     comment: '操作对象'
   })
   target: string;
 
+  @IsPositive()
   @Column({
-    comment: '屏蔽的id'
+    comment: '对象的id'
   })
-  blockId: number;
+  targetId: number;
 
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(30)
   @Column({
     type: 'varchar',
     length: 30,

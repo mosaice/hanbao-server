@@ -1,20 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 import { Role } from './Role';
+import { IsNotEmpty, IsString, MaxLength, IsIn } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
+
 
 @Entity()
-export class Resource {
+export class Resource extends BaseEntity {
 
-  @PrimaryGeneratedColumn({
-    comment: '资源id'
-  })
-  id: number;
-
+  @IsIn(['view', 'access', 'update', 'delete'])
   @Column('enum', {
     enum: ['view', 'access', 'update', 'delete'],
     comment: '资源类型'
   })
   type: string;
 
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(30)
   @Column({
     type: 'varchar',
     length: 30,
@@ -22,6 +24,9 @@ export class Resource {
   })
   module: string;
 
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(30)
   @Column({
     type: 'varchar',
     length: 30,

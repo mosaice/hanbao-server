@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToMany } from 'typeorm';
+import { Entity, Column, OneToOne, OneToMany, ManyToMany, Index } from 'typeorm';
 import { AdminUser } from './AdminUser';
 import { Comment } from './Comment';
 import { UserHistory } from './UserHistory';
@@ -8,15 +8,17 @@ import { UserNotification } from './UserNotification';
 import { UserChannelMessage } from './UserChannelMessage';
 import { UserGroupRole } from './UserGroupRole';
 import { Post } from './Post';
+import { IsNotEmpty, IsString, MaxLength, IsEmail, MinLength, IsUrl, IsIn, IsPositive } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
+
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
 
-  @PrimaryGeneratedColumn({
-    comment: '用户id'
-  })
-  id: number;
-
+  @IsNotEmpty()
+  @IsEmail()
+  @MaxLength(50)
+  @Index({ unique: true })
   @Column({
     type: 'varchar',
     length: 50,
@@ -24,6 +26,10 @@ export class User {
   })
   email: string;
 
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(50)
+  @MinLength(10)
   @Column({
     type: 'varchar',
     length: 50,
@@ -32,6 +38,10 @@ export class User {
   })
   password: string;
 
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(30)
+  @Index({ unique: true })
   @Column({
     type: 'varchar',
     length: 30,
@@ -39,18 +49,21 @@ export class User {
   })
   name: string;
 
+  @IsString()  
   @Column({
     default: '这个人贼鸡儿懒，它什么都没写！',
     comment: '个人描述'    
   })
   description: string;
 
+  @IsUrl()
   @Column({
     default: 'https://account.bilibili.com/account/face/upload',
     comment: '头像'
   })
   avator: string;
 
+  @IsIn(['male', 'female', 'unknown'])
   @Column('enum', {
     enum: ['male', 'female', 'unknown'],
     default: 'unknown',
@@ -58,7 +71,9 @@ export class User {
   })
   sex: string;
 
+  @IsPositive()
   @Column({
+    default: 0,
     comment: '登陆次数'
   })
   loginCount: number;

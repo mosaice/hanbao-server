@@ -15,7 +15,7 @@ const ormconfig = {
     database: 'hanbao',
     logging: 'all',
     maxQueryExecutionTime: 1000,
-    debug: true,
+    debug: false,
     trace: true,
     synchronize: true,
   },

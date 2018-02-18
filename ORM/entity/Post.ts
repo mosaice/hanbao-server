@@ -1,18 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, ManyToMany, Index } from 'typeorm';
 import { UserGroup } from './UserGroup';
 import { Comment } from './Comment';
 import { PostAppend } from './PostAppend';
 import { PostTags } from './PostTags';
 import { User } from './User';
+import { IsString, IsNotEmpty, MaxLength, IsPositive, IsIn } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
 
 @Entity()
-export class Post {
+export class Post extends BaseEntity {
 
-  @PrimaryGeneratedColumn({
-    comment: '文章id'
-  })
-  id: number;
-
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(50)
+  @Index()
   @Column({
     type: 'varchar',
     length: 50,
@@ -20,18 +21,23 @@ export class Post {
   })
   title: string;
 
+  @IsString()
+  @IsNotEmpty()
   @Column({
     type: 'text',
     comment: '文章内容'
   })
   content: string;
 
+  @IsPositive()
   @Column({
     default: 0,
     comment: '浏览次数'
   })
   viewCount: number;
 
+
+  @IsIn(['public', 'private', 'protect'])
   @Column('enum', {
     enum: ['public', 'private', 'protect'],
     default: 'public',

@@ -1,15 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, Index } from 'typeorm';
 import { Post } from './Post';
 import { UserGroupRole } from './UserGroupRole';
+import { IsIn, IsString, MaxLength, IsNotEmpty } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
+
 
 @Entity()
-export class UserGroup {
+export class UserGroup extends BaseEntity {
 
-  @PrimaryGeneratedColumn({
-    comment: '用户组id'
-  })
-  id: number;
-
+  @IsIn(['public', 'private'])
   @Column('enum', {
     enum: ['public', 'private'],
     default: 'public',
@@ -17,6 +16,10 @@ export class UserGroup {
   })
   viewPermission: string;
 
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(30)
+  @Index({ unique: true })
   @Column({
     type: 'varchar',
     length: 30,
@@ -24,6 +27,7 @@ export class UserGroup {
   })
   name: string;
 
+  @IsString()
   @Column({
     comment: '用户组描述'    
   })

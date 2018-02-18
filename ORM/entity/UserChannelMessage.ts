@@ -1,14 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, ManyToOne, OneToMany, Index } from 'typeorm';
 import { User } from './User';
 import { ChatChannel } from './ChatChannel';
 import { ChatMessage } from './ChatMessage';
+import { BaseEntity } from './BaseEnity';
 
 @Entity()
-export class UserChannelMessage {
-  @PrimaryGeneratedColumn({
-    comment: '关系id'
-  })
-  id: number;
+@Index(['user', 'channel'], { unique: true })
+export class UserChannelMessage extends BaseEntity {
 
   /* 用户定位关系 */
   @ManyToOne(type => User, user => user.messageBelongs)

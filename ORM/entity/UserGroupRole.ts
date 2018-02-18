@@ -1,15 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, ManyToOne, Index } from 'typeorm';
 import { User } from './User';
 import { UserGroup } from './UserGroup';
 import { Role } from './Role';
+import { BaseEntity } from './BaseEnity';
 
 @Entity()
-export class UserGroupRole {
-
-  @PrimaryGeneratedColumn({
-    comment: '用户和组关系表id'
-  })
-  id: number;
+@Index(['user', 'group'], { unique: true })
+export class UserGroupRole extends BaseEntity {
 
   @ManyToOne(type => User, user => user.groupRoles)
   user: User

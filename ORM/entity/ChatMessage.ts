@@ -1,13 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { UserChannelMessage } from './UserChannelMessage';
+import { IsString } from 'class-validator'
+import { BaseEntity } from './BaseEnity';
 
 @Entity()
-export class ChatMessage {
-  @PrimaryGeneratedColumn({
-    comment: '消息id'
-  })
-  id: number;
+export class ChatMessage extends BaseEntity {
 
+  @IsString()
   @Column({
     type: 'varchar',
     comment: '消息内容'
