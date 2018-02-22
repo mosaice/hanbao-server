@@ -4,7 +4,7 @@ import { Comment } from './Comment';
 import { PostAppend } from './PostAppend';
 import { PostTags } from './PostTags';
 import { User } from './User';
-import { IsString, IsNotEmpty, MaxLength, IsPositive, IsIn } from 'class-validator'
+import { IsString, IsNotEmpty, MaxLength, IsPositive, IsIn, IsOptional, IsUrl } from 'class-validator'
 import { BaseEntity } from './BaseEnity';
 
 @Entity()
@@ -30,6 +30,7 @@ export class Post extends BaseEntity {
   content: string;
 
   @IsPositive()
+  @IsOptional()
   @Column({
     default: 0,
     comment: '浏览次数'
@@ -38,6 +39,7 @@ export class Post extends BaseEntity {
 
 
   @IsIn(['public', 'private', 'protect'])
+  @IsOptional()
   @Column('enum', {
     enum: ['public', 'private', 'protect'],
     default: 'public',
@@ -45,6 +47,8 @@ export class Post extends BaseEntity {
   })
   viewPermission: string;
 
+  @IsUrl()
+  @IsOptional()
   @Column({
     nullable: true,
     comment: '文章默认图'

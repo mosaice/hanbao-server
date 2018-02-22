@@ -20,7 +20,15 @@ import { unless } from '../utils/helper';
 export class AuthModule implements NestModule {
   public configure(consumer: MiddlewaresConsumer) {
     consumer
-      .apply(unless(['/auth/authorized'],passport.authenticate('jwt', { session: false })))
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
+      .apply(
+        unless(
+          [
+            '/auth/authorized',
+            '/user',
+          ],
+          passport.authenticate('jwt', { session: false })
+        )
+      )
+      .forRoutes({ path: '/auth/authorized/*', method: RequestMethod.ALL });
   }
 }

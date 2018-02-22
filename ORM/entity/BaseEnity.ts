@@ -1,28 +1,46 @@
 import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from "typeorm";
-import { IsDate } from 'class-validator'
-
+import { validate } from 'class-validator'
+import { BadRequestException } from '@nestjs/common';
 
 export abstract class BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @IsDate()
-  @CreateDateColumn()
+  @CreateDateColumn({
+    select: false
+  })
   createAt: Date
 
-  @IsDate()
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    select: false
+  })
   updateAt: Date
 
-
   @BeforeInsert()
-  createDates() {
-    this.createAt = new Date();
+  async validateBeforeInsert() {
+    const validateErrors = await validate(this, {
+      validationError: { target: false }      
+    });
+    if (validateErrors.length > 0) {
+      throw new BadRequestException(validateErrors);
+    }
   }
+
 
   @BeforeUpdate()
-  updateDates() {
-    this.updateAt = new Date();
+  async validateBeforeUpdate() {
+    const validateErrors = await validate(this, {
+      validationError: { target: false },
+      skipMissingProperties: true,
+    });
+    if (validateErrors.length > 0) {
+      throw new BadRequestException(validateErrors);
+    }
   }
+
+  // @BeforeUpdate()
+  // updateDates() {
+  //   this.updateAt = new Date();
+  // }
 }

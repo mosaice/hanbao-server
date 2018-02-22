@@ -32,6 +32,7 @@ export class Role extends BaseEntity {
   child: Role
 
   @OneToOne(type => Role, role => role.beGrant)
+  @JoinColumn()
   grant: Role
 
   @OneToOne(type => Role, role => role.grant)

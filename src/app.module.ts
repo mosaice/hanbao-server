@@ -6,10 +6,13 @@ import { AuthModule } from './auth/auth.module';
 
 import getOrmConfig from '../ORM/config';
 
+import { UserModule } from './user/user.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot(getOrmConfig()),
-    AuthModule
+    AuthModule,
+    UserModule
   ],
   controllers: [AppController],
 })

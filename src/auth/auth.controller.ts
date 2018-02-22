@@ -8,4 +8,8 @@ export class AuthController {
 	async root():Promise<any> {
     return  await this.auth.createToken();
   }
+	@Get('/authorized/1')
+	findOne():string {
+    return 'test';
+  }
 }

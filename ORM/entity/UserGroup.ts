@@ -1,7 +1,7 @@
 import { Entity, Column, OneToMany, Index } from 'typeorm';
 import { Post } from './Post';
 import { UserGroupRole } from './UserGroupRole';
-import { IsIn, IsString, MaxLength, IsNotEmpty } from 'class-validator'
+import { IsIn, IsString, MaxLength, IsNotEmpty, IsOptional } from 'class-validator'
 import { BaseEntity } from './BaseEnity';
 
 
@@ -9,6 +9,7 @@ import { BaseEntity } from './BaseEnity';
 export class UserGroup extends BaseEntity {
 
   @IsIn(['public', 'private'])
+  @IsOptional()
   @Column('enum', {
     enum: ['public', 'private'],
     default: 'public',

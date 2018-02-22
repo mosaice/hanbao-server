@@ -7,9 +7,9 @@ import { BaseEntity } from './BaseEnity';
 @Entity()
 export class Resource extends BaseEntity {
 
-  @IsIn(['view', 'access', 'update', 'delete'])
+  @IsIn(['view', 'access', 'update', 'delete', 'create'])
   @Column('enum', {
-    enum: ['view', 'access', 'update', 'delete'],
+    enum: ['view', 'access', 'update', 'delete', 'create'],
     comment: '资源类型'
   })
   type: string;

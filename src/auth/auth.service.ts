@@ -3,10 +3,10 @@ import { Component } from '@nestjs/common';
 
 @Component()
 export class AuthService {
-  async createToken() {
-    const expiresIn = 60 * 60;
-    const user = { email: 'thisis@example.com' };
+  createToken(user) {
+    const expiresIn = '7d';
     const token = jwt.sign(user, authKey, { expiresIn });
+
     return {
       expires_in: expiresIn,
       access_token: token,
