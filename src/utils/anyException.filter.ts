@@ -3,7 +3,6 @@ import { ExceptionFilter, Catch } from '@nestjs/common';
 @Catch()
 export class AnyExceptionFilter implements ExceptionFilter {
   catch(exception, response) {
-    console.log(exception);
     response
       .status(200)
       .json({

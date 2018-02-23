@@ -17,6 +17,7 @@ async function bootstrap() {
 
   const options = new DocumentBuilder()
     .setTitle('Hanbao example')
+    .setBasePath('/api/v1')
     .setDescription('The Hanbao API description')
     .setVersion('1.0')
     .build();

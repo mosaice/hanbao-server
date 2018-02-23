@@ -10,11 +10,11 @@ export class UserValidationPipe implements PipeTransform<any> {
       return value;
     }
 
-    try {
-      value.password = new Buffer(value.password, 'base64').toString('binary');
-    } catch (error) {
-      throw new BadRequestException('Password format error');
-    }
+    // try {
+    //   value.password = new Buffer(value.password, 'base64').toString('binary');
+    // } catch (error) {
+    //   throw new BadRequestException('Password format error');
+    // }
 
     const object = plainToClass(metatype, value);
     const errors = await validate(object, { validationError: { target: false }});

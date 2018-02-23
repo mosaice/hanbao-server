@@ -32,7 +32,6 @@ export class User extends BaseEntity {
   @MinLength(8)
   @Column({
     type: 'varchar',
-    select: false,
     comment: '加密过密码'    
   })
   password: string;
