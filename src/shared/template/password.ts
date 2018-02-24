@@ -1,3 +1,4 @@
+export const password = (link: string): string => `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -1755,7 +1756,7 @@
                                   </tbody>
                                 </table>
 
-                                <h4 class="text-center">Pirate Retirement Services</h4>
+                                <h4 class="text-center">Hanbao Email Services</h4>
                               </th>
                               <th class="expander"></th>
                             </tr>
@@ -1781,7 +1782,7 @@
                                 </table>
 
                                 <center data-parsed="">
-                                  <img src="http://placehold.it/250x250" align="center" class="float-center">
+                                  <img src="https://static.hdslb.com/images/member/noface.gif" align="center" class="float-center">
                                 </center>
 
                                 <table class="spacer">
@@ -1810,7 +1811,7 @@
                                         <tr>
                                           <td>
                                             <center data-parsed="">
-                                              <a href="#" align="center" class="float-center">Reset Password</a>
+                                              <a href="${link}" align="center" class="float-center">Reset Password</a>
                                             </center>
                                           </td>
                                         </tr>
@@ -1823,9 +1824,9 @@
                                 <hr>
 
                                 <p>
-                                  <small>You're getting this email because you've signed up for email updates. If you want to opt-out
-                                    of future emails,
-                                    <a href="#">unsubscribe here</a>.</small>
+                                  <small>如果无法点击，请尝试复制链到浏览器中</small>
+                                  <br>
+                                  <small>${link}</small>
                                 </p>
                               </th>
                               <th class="expander"></th>
@@ -1834,8 +1835,8 @@
                         </th>
                       </tr>
                     </tbody>
-                  </table>
 
+                  </table>
                   <table class="spacer">
                     <tbody>
                       <tr>
@@ -1858,3 +1859,4 @@
 </body>
 
 </html>
+`

@@ -17,14 +17,12 @@
     "@nestjs/testing": "^4.6.1",
     "@nestjs/typeorm": "^2.0.0",
     "@nestjs/websockets": "^4.5.8",
-    "@types/express-session": "^1.15.8",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.8.1",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
     "jsonwebtoken": "^8.1.1",
+    "lodash": "^4.17.5",
     "mysql": "^2.15.0",
-    "nodemailer": "^4.5.0",
+    "nodemailer": "^4.6.0",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
     "redis": "^2.8.0",
@@ -34,6 +32,8 @@
     "typescript": "^2.7.2"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.1",
+    "@types/lodash": "^4.14.104",
     "@types/node": "^9.4.6",
     "nodemon": "^1.15.1",
     "ts-node": "^5.0.0"

@@ -8,13 +8,14 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { AuthController } from './auth.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../../ORM/entity/User';
 import { unless } from '../utils/helper';
 
 @Global()
 @Module({
+  imports: [TypeOrmModule.forFeature([User])],
   components: [AuthService, JwtStrategy],
-  controllers: [AuthController],
   exports: [AuthService]
 })
 export class AuthModule implements NestModule {
@@ -23,12 +24,14 @@ export class AuthModule implements NestModule {
       .apply(
         unless(
           [
-            '/auth/authorized',
             '/user',
           ],
           passport.authenticate('jwt', { session: false })
         )
       )
-      .forRoutes({ path: '/auth/authorized/*', method: RequestMethod.ALL });
+      .forRoutes(
+        { path: '/user/profile', method: RequestMethod.ALL },
+        { path: '/user/password', method: RequestMethod.PATCH },
+      );
   }
 }

@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-
+import { SharedModule } from './shared/shared.module';
 import getOrmConfig from '../ORM/config';
 
 import { UserModule } from './user/user.module';
@@ -11,9 +10,9 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(getOrmConfig()),
+    SharedModule,
     AuthModule,
     UserModule
-  ],
-  controllers: [AppController],
+  ]
 })
 export class ApplicationModule {}

@@ -1,8 +1,16 @@
 import * as jwt from 'jsonwebtoken';
+import { User } from '../../ORM/entity/User';
+import { InjectRepository } from '@nestjs/typeorm'
 import { Component } from '@nestjs/common';
+import { Repository } from 'typeorm';
 
 @Component()
 export class AuthService {
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
+
   createToken(user) {
     const expiresIn = '7d';
     const token = jwt.sign(user, authKey, { expiresIn });
@@ -14,9 +22,13 @@ export class AuthService {
   }
 
   async validateUser(signedUser): Promise<boolean> {
-    console.log(signedUser)
-    // put some validation logic here
-    // for example query user by id / email / username
-    return true;
+    const user = await this.userRepository.findOne({
+      where: {
+        id: signedUser.id,
+        email: signedUser.email,
+        name: signedUser.name,
+      }
+    });
+    return !!user
   }
 }

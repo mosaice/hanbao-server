@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany, ManyToMany, Index } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, ManyToMany, Index, JoinTable } from 'typeorm';
 import { UserGroup } from './UserGroup';
 import { Comment } from './Comment';
 import { PostAppend } from './PostAppend';
@@ -69,12 +69,15 @@ export class Post extends BaseEntity {
   appends: PostAppend[]
 
   @ManyToMany(type => PostTags, tag => tag.posts)
+  @JoinTable()
   tags: PostTags[]
 
   @ManyToMany(type => User, user => user.likedPosts)
+  @JoinTable()  
   likedUsers: User[]
 
   @ManyToMany(type => User, user => user.dislikedPosts)
+  @JoinTable()  
   dislikedUsers: User[]
 
 }

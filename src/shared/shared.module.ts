@@ -2,11 +2,13 @@ import {
   Module,
   Global
 } from '@nestjs/common';
-import { JSONInterceptor } from './json.interceptor'
+import { MailService } from './mail.service';
+import { BcryptService } from './bcrypt.service';
+import { RedisService } from './redis.service';
 
 @Global()
 @Module({
-  components: [MailService],
-  exports: [MailService]
+  components: [MailService, BcryptService, RedisService],
+  exports: [MailService, BcryptService, RedisService]
 })
 export class SharedModule {}

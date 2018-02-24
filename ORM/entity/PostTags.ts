@@ -18,7 +18,6 @@ export class PostTags extends BaseEntity {
   content: string;
 
   @ManyToMany(type => Post, post => post.tags)
-  @JoinTable()
   posts: Post[]
 
 }

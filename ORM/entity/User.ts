@@ -1,4 +1,4 @@
-import { Entity, Column, OneToOne, OneToMany, ManyToMany, Index, BeforeInsert } from 'typeorm';
+import { Entity, Column, OneToOne, OneToMany, ManyToMany, Index, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { AdminUser } from './AdminUser';
 import { Comment } from './Comment';
 import { UserHistory } from './UserHistory';
@@ -81,7 +81,13 @@ export class User extends BaseEntity {
   loginCount: number;
 
   @BeforeInsert()
+  @BeforeUpdate()
   encodePassword() {
+    const salt = bcrypt.genSaltSync(10);
+    this.password = bcrypt.hashSync(this.password, salt);
+  }
+
+  encodePassword1() {
     const salt = bcrypt.genSaltSync(10);
     this.password = bcrypt.hashSync(this.password, salt);
   }
