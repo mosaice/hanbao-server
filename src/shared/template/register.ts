@@ -78,7 +78,7 @@ export const register = (link: string): string => `
                                 <a href="${link}">Click me!</a>
 
                                 <p>如果无法点击，请尝试复制链到浏览器中。</p>
-                                <a href="${link}">${link}</a>                                
+                                <a href="${link}">${link}</a>
                               </th>
                               <th class="expander"></th>
                             </tr>
@@ -105,9 +105,11 @@ export const register = (link: string): string => `
     </tr>
   </table>
   <!-- prevent Gmail on iOS font size manipulation -->
-  <div style="display:none; white-space:nowrap; font:15px courier; line-height:0;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>
+  <div style="display:none; white-space:nowrap; font:15px courier; line-height:0;">
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  </div>
 </body>
 
 </html>
-`
+`;

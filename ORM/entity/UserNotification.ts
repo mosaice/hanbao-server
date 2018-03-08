@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { User } from './User';
-import { IsNotEmpty, IsString, MaxLength, IsPositive } from 'class-validator'
+import { IsNotEmpty, IsString, MaxLength, IsPositive } from 'class-validator';
 import { BaseEntity } from './BaseEnity';
 
 @Entity()
@@ -12,13 +12,13 @@ export class UserNotification extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 30,
-    comment: '消息类型'
+    comment: '消息类型',
   })
   type: string;
 
   @IsPositive()
   @Column({
-    comment: '消息来源'
+    comment: '消息来源',
   })
   sourceId: number;
 
@@ -28,11 +28,11 @@ export class UserNotification extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 30,
-    comment: '操作动作'
+    comment: '操作动作',
   })
   action: string;
 
   /* 用户关系 */
   @ManyToOne(type => User, user => user.notifications)
-  user: User
+  user: User;
 }

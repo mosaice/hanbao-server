@@ -1,6 +1,6 @@
-import { Entity, Column, ManyToMany, JoinTable, Index } from "typeorm";
+import { Entity, Column, ManyToMany, Index } from 'typeorm';
 import { Post } from './Post';
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator'
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { BaseEntity } from './BaseEnity';
 
 @Entity()
@@ -12,12 +12,12 @@ export class PostTags extends BaseEntity {
   @Index({ unique: true })
   @Column({
     type: 'varchar',
-    length: 50,
-    comment: '标签内容'
+      length: 50,
+    comment: '标签内容',
   })
   content: string;
 
   @ManyToMany(type => Post, post => post.tags)
-  posts: Post[]
+  posts: Post[];
 
 }

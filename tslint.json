@@ -1,9 +1,7 @@
 {
     "defaultSeverity": "error",
     "extends": [
-        "tslint:recommended",
-        "tslint:latest",
-        "tslint-config-prettier"
+        "tslint:recommended"
     ],
     "jsRules": {
         "no-unused-expression": true
@@ -14,6 +12,15 @@
             true,
             "single"
         ],
+        "no-console": [
+            true,
+            "error",
+            "debug",
+            "info",
+            "time",
+            "timeEnd",
+            "trace"
+        ],
         "indent": false,
         "member-access": [
             false
@@ -21,9 +28,7 @@
         "ordered-imports": [
             false
         ],
-        "max-line-length": [
-            150
-        ],
+        "max-line-length": [true,150],
         "member-ordering": [
             false
         ],

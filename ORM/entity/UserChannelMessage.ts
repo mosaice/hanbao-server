@@ -10,13 +10,13 @@ export class UserChannelMessage extends BaseEntity {
 
   /* 用户定位关系 */
   @ManyToOne(type => User, user => user.messageBelongs)
-  user: User
+  user: User;
 
   /* 频道定位关系 */
   @ManyToOne(type => ChatChannel, channel => channel.messageBelongs)
-  channel: ChatChannel
+  channel: ChatChannel;
 
   @OneToMany(type => ChatMessage, message => message.belong)
-  messages: ChatMessage[]
+  messages: ChatMessage[];
 
 }

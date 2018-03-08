@@ -9,12 +9,12 @@ import { BaseEntity } from './BaseEnity';
 export class UserGroupRole extends BaseEntity {
 
   @ManyToOne(type => User, user => user.groupRoles)
-  user: User
+  user: User;
 
   @ManyToOne(type => UserGroup, group => group.userRoles)
-  group: UserGroup
+  group: UserGroup;
 
   @ManyToOne(type => Role, role => role.userAndGroups)
-  role: Role
+  role: Role;
 
 }

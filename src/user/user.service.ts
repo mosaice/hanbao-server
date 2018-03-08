@@ -1,5 +1,5 @@
 import { Component, BadRequestException, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm'
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as qs from 'querystring';
 
@@ -17,7 +17,7 @@ import {
   UserBaseInformation,
   PasswordDto,
   ResetPasswordDto,
-  RegisterValidationDto
+  RegisterValidationDto,
 } from './user.dto';
 
 @Component()
@@ -28,7 +28,7 @@ export class UserService {
     private mailClient: MailService,
     private authService: AuthService,
     private bcrypt: BcryptService,
-    private redis: RedisService
+    private redis: RedisService,
   ) {}
 
   async registerUser(createUserDto: CreateUserDto): Promise<any> {
@@ -40,14 +40,14 @@ export class UserService {
       .getOne();
 
     if (checkUser) throw new BadRequestException('Email or Name exist !');
-    
+
     const hash = this.bcrypt.hash(createUserDto.email);
     this.redis.redisClient.set(hash, JSON.stringify(createUserDto), 'EX', 1800);
 
     this.mailClient.registerMail({
       to: createUserDto.email,
-      link: `http://localhost:3000/api/v1/user/register?userKey=${qs.escape(hash)}`
-    })
+      link: `http://localhost:3000/api/v1/user/register?userKey=${qs.escape(hash)}`,
+    });
   }
 
   async createUser(key: string) {
@@ -65,7 +65,7 @@ export class UserService {
 
   async signIn(account: AccountDto) {
     const user = await this.userRepository.findOne({
-      where: { email: account.email }
+      where: { email: account.email },
     });
 
     if (!user || !user.validatePassword(account.password))
@@ -73,23 +73,23 @@ export class UserService {
 
     user.loginCount += 1;
     await this.userRepository.updateById(user.id, {
-      loginCount: user.loginCount
+      loginCount: user.loginCount,
     });
 
     const { password, ...info } = user;
 
     const jwtoken = this.authService.createToken({ id: info.id, email: info.email, name: info.name });
-    
+
     return {
       ...info,
-      jwtoken
+      jwtoken,
     };
 
   }
 
   async getProfile(user: UserBaseInformation) {
     return await this.userRepository.findOneById(user.id, {
-      select: ['id', 'email', 'name', 'description', 'avator', 'sex', 'loginCount']
+      select: ['id', 'email', 'name', 'description', 'avator', 'sex', 'loginCount'],
     });
   }
 
@@ -104,7 +104,7 @@ export class UserService {
       throw new BadRequestException('Password invalid!');
 
     await this.userRepository.updateById(user.id, {
-      password: this.bcrypt.hash(pwd.newPassword)
+      password: this.bcrypt.hash(pwd.newPassword),
     });
 
     // user.password = pwd.newPassword;
@@ -113,7 +113,7 @@ export class UserService {
 
   async sendResetMail(email: string) {
     const user = await this.userRepository.findOne({
-      where: { email }
+      where: { email },
     });
 
     if (user) {
@@ -121,8 +121,8 @@ export class UserService {
       this.redis.redisClient.set(hash, email, 'EX', 1800);
       this.mailClient.passwordMail({
         to: email,
-        link: `http://localhost:4200/user/reset?userKey=${qs.escape(hash)}`
-      })
+        link: `http://localhost:4200/user/reset?userKey=${qs.escape(hash)}`,
+      });
     }
   }
 
@@ -131,8 +131,8 @@ export class UserService {
 
     if (!email) throw new NotFoundException('userKey not found');
     this.redis.redisClient.del(qs.unescape(pwd.userKey));
-    await this.userRepository.update({ email },{
-      password: this.bcrypt.hash(pwd.password)
+    await this.userRepository.update({ email }, {
+      password: this.bcrypt.hash(pwd.password),
     });
   }
 
@@ -146,18 +146,18 @@ export class UserService {
     let checkMail, checkName;
     if (account.email) {
       checkMail = await this.userRepository.findOne({
-        where: { email: account.email }
-      })
+        where: { email: account.email },
+      });
 
-      if (checkMail) throw new BadRequestException('Email or Name exist !')
+      if (checkMail) throw new BadRequestException('Email or Name exist !');
     }
 
     if (account.name) {
       checkName = await this.userRepository.findOne({
-        where: { name: account.name }
-      })
+        where: { name: account.name },
+      });
 
-      if (checkName) throw new BadRequestException('Email or Name exist !')
+      if (checkName) throw new BadRequestException('Email or Name exist !');
     }
   }
 }

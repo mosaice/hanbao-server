@@ -1,5 +1,5 @@
-import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from "typeorm";
-import { validate } from 'class-validator'
+import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { validate } from 'class-validator';
 import { BadRequestException } from '@nestjs/common';
 
 export abstract class BaseEntity {
@@ -8,25 +8,24 @@ export abstract class BaseEntity {
   id: number;
 
   @CreateDateColumn({
-    select: false
+    select: false,
   })
-  createAt: Date
+  createAt: Date;
 
   @UpdateDateColumn({
-    select: false
+    select: false,
   })
-  updateAt: Date
+  updateAt: Date;
 
   @BeforeInsert()
   async validateBeforeInsert() {
     const validateErrors = await validate(this, {
-      validationError: { target: false }      
+      validationError: { target: false },
     });
     if (validateErrors.length > 0) {
       throw new BadRequestException(validateErrors);
     }
   }
-
 
   @BeforeUpdate()
   async validateBeforeUpdate() {
@@ -39,8 +38,4 @@ export abstract class BaseEntity {
     }
   }
 
-  // @BeforeUpdate()
-  // updateDates() {
-  //   this.updateAt = new Date();
-  // }
 }

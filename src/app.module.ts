@@ -12,7 +12,7 @@ import { UserModule } from './user/user.module';
     TypeOrmModule.forRoot(getOrmConfig()),
     SharedModule,
     AuthModule,
-    UserModule
-  ]
+    UserModule,
+  ],
 })
 export class ApplicationModule {}

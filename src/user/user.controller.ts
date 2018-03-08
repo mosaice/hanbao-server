@@ -8,15 +8,15 @@ import {
   UsePipes,
   Query,
   NotFoundException,
-  BadRequestException
+  BadRequestException,
 } from '@nestjs/common';
 
 import {
   ApiUseTags,
   ApiOperation,
   ApiImplicitQuery,
-  ApiBearerAuth
-} from '@nestjs/swagger'
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 import {
   CreateUserDto,
@@ -26,10 +26,10 @@ import {
   PasswordDto,
   EmailDto,
   ResetPasswordDto,
-  RegisterValidationDto
+  RegisterValidationDto,
 } from './user.dto';
 
-import { User } from '../utils/decorator'
+import { User } from '../utils/decorator';
 import { UserValidationPipe } from './user.validationPipe';
 import { UserService } from './user.service';
 
@@ -37,12 +37,12 @@ import { UserService } from './user.service';
 @Controller('user')
 export class UserController {
   constructor(
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   @Post('/signin')
   @ApiOperation({title: '账号登陆', description: '登陆获取个人信息和jwtoken'})
-  @UsePipes(new UserValidationPipe())  
+  @UsePipes(new UserValidationPipe())
 	async findAll(@Body() account: AccountDto) {
     return await this.userService.signIn(account);
   }
@@ -59,20 +59,20 @@ export class UserController {
   @ApiOperation({title: '验证注册账号信息'})
   @UsePipes(new UserValidationPipe())
   async validate(@Body() account: RegisterValidationDto) {
-    if (isEmpty(account)) throw new BadRequestException()
+    if (isEmpty(account)) throw new BadRequestException();
     await this.userService.validateUser(account);
   }
 
   @Get('/register')
-  @ApiOperation({title: '生成用户账号', description: '从邮件中地址跳转后，创建真实的用户'})  
+  @ApiOperation({title: '生成用户账号', description: '从邮件中地址跳转后，创建真实的用户'})
   @ApiImplicitQuery({ name: 'userKey', description: '邮箱hash之后的key', required: true, type: String })
   async registerAccount(@Query('userKey') key: string) {
-    if(!key) throw new NotFoundException('userKey not found');
+    if (!key) throw new NotFoundException('userKey not found');
     await this.userService.createUser(key);
   }
 
   @Get('/profile')
-  @ApiOperation({title: '获取用户资料' })  
+  @ApiOperation({title: '获取用户资料' })
   @ApiBearerAuth()
   async getProfile(@User() user: UserBaseInformation) {
     return await this.userService.getProfile(user);
@@ -97,15 +97,15 @@ export class UserController {
 
   @Post('/password')
   @ApiOperation({title: '申请重置密码' })
-  @UsePipes(new UserValidationPipe())  
+  @UsePipes(new UserValidationPipe())
   async resetPassword(@Body() mail: EmailDto) {
     await this.userService.sendResetMail(mail.email);
-    return '邮件已发送，请检查邮箱';    
+    return '邮件已发送，请检查邮箱';
   }
 
   @Post('/reset')
-  @ApiOperation({title: '重置密码请求' })  
-  @UsePipes(new UserValidationPipe())  
+  @ApiOperation({title: '重置密码请求' })
+  @UsePipes(new UserValidationPipe())
   async resetAccount(@Body() pwd: ResetPasswordDto) {
     await this.userService.resetAccount(pwd);
   }

@@ -3,7 +3,7 @@ const baseConfig = {
   entities: ['ORM/entity/**/*.ts'],
   migrations: ['ORM/migration/**/*.ts'],
   subscribers: ['ORM/subscriber/**/*.ts'],
-}
+};
 
 const ormconfig = {
   dev: {
@@ -20,7 +20,7 @@ const ormconfig = {
     synchronize: true,
   },
   prod: {
-    ...baseConfig,    
+    ...baseConfig,
     host: 'localhost',
     port: 3306,
     username: 'root',
@@ -29,18 +29,18 @@ const ormconfig = {
     logging: ['query', 'error'],
     maxQueryExecutionTime: 1000,
     cache: {
-      type: "redis",
+      type: 'redis',
       options: {
-          host: "localhost",
-          port: 6379
+          host: 'localhost',
+          port: 6379,
       },
-      duration: 60000
+      duration: 60000,
     },
-    synchronize: false
-  }
-}
+    synchronize: false,
+  },
+};
 
 export default () => {
   const ENV: string = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
   return ormconfig[ENV];
-}
+};

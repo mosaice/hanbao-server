@@ -15,8 +15,8 @@ export class MailService {
       secure: true,
       auth: {
         user: mailAccount,
-        pass: mailPassword
-      }
+        pass: mailPassword,
+      },
     });
   }
 
@@ -24,8 +24,8 @@ export class MailService {
     const message = {
       from: '"notify"<a309584795@163.com>',
       to,
-      subject: "Welcome to join us!",
-      html: register(link)
+      subject: 'Welcome to join us!',
+      html: register(link),
     };
 
     this.transporter.sendMail(message, (error, info) => {
@@ -43,8 +43,8 @@ export class MailService {
     const message = {
       from: '"notify"<a309584795@163.com>',
       to,
-      subject: "hanbao reset password mail!",
-      html: password(link)
+      subject: 'hanbao reset password mail!',
+      html: password(link),
     };
 
     this.transporter.sendMail(message, (error, info) => {

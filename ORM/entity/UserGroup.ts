@@ -1,9 +1,8 @@
 import { Entity, Column, OneToMany, Index } from 'typeorm';
 import { Post } from './Post';
 import { UserGroupRole } from './UserGroupRole';
-import { IsIn, IsString, MaxLength, IsNotEmpty, IsOptional } from 'class-validator'
+import { IsIn, IsString, MaxLength, IsNotEmpty, IsOptional } from 'class-validator';
 import { BaseEntity } from './BaseEnity';
-
 
 @Entity()
 export class UserGroup extends BaseEntity {
@@ -13,7 +12,7 @@ export class UserGroup extends BaseEntity {
   @Column('enum', {
     enum: ['public', 'private'],
     default: 'public',
-    comment: '浏览权限'
+    comment: '浏览权限',
   })
   viewPermission: string;
 
@@ -24,13 +23,13 @@ export class UserGroup extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 30,
-    comment: '用户组名称'
+    comment: '用户组名称',
   })
   name: string;
 
   @IsString()
   @Column({
-    comment: '用户组描述'    
+    comment: '用户组描述',
   })
   description: string;
 

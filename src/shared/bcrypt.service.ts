@@ -17,6 +17,4 @@ export class BcryptService {
     return bcrypt.compareSync(plain, encryption);
   }
 
-
-
 }

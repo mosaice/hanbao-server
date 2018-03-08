@@ -1,4 +1,4 @@
-import { Entity, OneToOne, JoinColumn } from "typeorm";
+import { Entity, OneToOne, JoinColumn } from 'typeorm';
 import { User } from './User';
 import { BaseEntity } from './BaseEnity';
 
@@ -9,6 +9,5 @@ export class AdminUser extends BaseEntity {
   @OneToOne(type => User, user => user.admin)
   @JoinColumn()
   user: User;
-
 
 }

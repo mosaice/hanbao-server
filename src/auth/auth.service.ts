@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { User } from '../../ORM/entity/User';
-import { InjectRepository } from '@nestjs/typeorm'
+import { InjectRepository } from '@nestjs/typeorm';
 import { Component } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
@@ -27,8 +27,8 @@ export class AuthService {
         id: signedUser.id,
         email: signedUser.email,
         name: signedUser.name,
-      }
+      },
     });
-    return !!user
+    return !!user;
   }
 }

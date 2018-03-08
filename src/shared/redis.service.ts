@@ -8,7 +8,7 @@ export const getAsync = promisify(redisClient.get).bind(redisClient);
 
 @Component()
 export class RedisService {
-  readonly redisClient: any
+  readonly redisClient: any;
   readonly getAsync: any;
 
   constructor() {

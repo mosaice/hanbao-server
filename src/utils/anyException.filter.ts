@@ -8,7 +8,7 @@ export class AnyExceptionFilter implements ExceptionFilter {
       .json({
         statusCode: exception.response ? exception.response.statusCode : 500,
         error: exception.response ? exception.response.error : 'Internal server error',
-        message: exception.response ? exception.response.message : exception.message
+        message: exception.response ? exception.response.message : exception.message,
       });
   }
 }

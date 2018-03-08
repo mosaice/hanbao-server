@@ -4,7 +4,7 @@ import {
   NestModule,
   MiddlewaresConsumer,
   RequestMethod,
-  Global
+  Global,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
@@ -16,7 +16,7 @@ import { unless } from '../utils/helper';
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   components: [AuthService, JwtStrategy],
-  exports: [AuthService]
+  exports: [AuthService],
 })
 export class AuthModule implements NestModule {
   public configure(consumer: MiddlewaresConsumer) {
@@ -26,8 +26,8 @@ export class AuthModule implements NestModule {
           [
             '/user',
           ],
-          passport.authenticate('jwt', { session: false })
-        )
+          passport.authenticate('jwt', { session: false }),
+        ),
       )
       .forRoutes(
         { path: '/user/profile', method: RequestMethod.ALL },

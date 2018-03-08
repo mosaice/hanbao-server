@@ -8,10 +8,9 @@ import { UserNotification } from './UserNotification';
 import { UserChannelMessage } from './UserChannelMessage';
 import { UserGroupRole } from './UserGroupRole';
 import { Post } from './Post';
-import { IsNotEmpty, IsString, MaxLength, IsEmail, MinLength, IsUrl, IsIn, IsPositive, IsOptional } from 'class-validator'
+import { IsNotEmpty, IsString, MaxLength, IsEmail, MinLength, IsUrl, IsIn, IsPositive, IsOptional } from 'class-validator';
 import { BaseEntity } from './BaseEnity';
 import * as bcrypt from 'bcryptjs';
-
 
 @Entity()
 export class User extends BaseEntity {
@@ -23,7 +22,7 @@ export class User extends BaseEntity {
   @Column({
     type: 'varchar',
           length: 50,
-    comment: '注册登陆用邮箱'
+    comment: '注册登陆用邮箱',
   })
   email: string;
 
@@ -32,7 +31,7 @@ export class User extends BaseEntity {
   @MinLength(8)
   @Column({
     type: 'varchar',
-    comment: '加密过密码'    
+    comment: '加密过密码',
   })
   password: string;
 
@@ -43,7 +42,7 @@ export class User extends BaseEntity {
   @Column({
     type: 'varchar',
     length: 30,
-    comment: '个性昵称'
+    comment: '个性昵称',
   })
   name: string;
 
@@ -51,32 +50,32 @@ export class User extends BaseEntity {
   @IsOptional()
   @Column({
     default: '这个人贼鸡儿懒，它什么都没写！',
-    comment: '个人描述'    
+    comment: '个人描述',
   })
   description: string;
 
   @IsUrl()
-  @IsOptional()  
+  @IsOptional()
   @Column({
     default: 'https://static.hdslb.com/images/member/noface.gif',
-    comment: '头像'
+    comment: '头像',
   })
   avator: string;
 
   @IsIn(['male', 'female', 'unknown'])
-  @IsOptional()  
+  @IsOptional()
   @Column('enum', {
     enum: ['male', 'female', 'unknown'],
     default: 'unknown',
-    comment: '性别'
+    comment: '性别',
   })
   sex: string;
 
   @IsPositive()
-  @IsOptional()  
+  @IsOptional()
   @Column({
     default: 0,
-    comment: '登陆次数'
+    comment: '登陆次数',
   })
   loginCount: number;
 
@@ -94,42 +93,41 @@ export class User extends BaseEntity {
 
   /* 用户管理员关联 */
   @OneToOne(type => AdminUser, admin => admin.user)
-  admin: AdminUser
+  admin: AdminUser;
 
   /* 用户评论关联 */
   @OneToMany(type => Comment, comment => comment.user)
-  comments: Comment[]
+  comments: Comment[];
 
   /* 用户历史关联 */
   @OneToMany(type => UserHistory, history => history.user)
-  histories: UserHistory[]
+  histories: UserHistory[];
 
   /* 用户屏蔽关联 */
   @OneToMany(type => UserBlock, block => block.user)
-  blocks: UserHistory[]
+  blocks: UserHistory[];
 
   /* 用户订阅关联 */
   @OneToMany(type => UserSubscribe, subscribe => subscribe.user)
-  subscribes: UserSubscribe[]
+  subscribes: UserSubscribe[];
 
   /* 用户消息关联 */
   @OneToMany(type => UserNotification, notification => notification.user)
-  notifications: UserNotification[]
+  notifications: UserNotification[];
 
   /* 用户频道定位关联 */
   @OneToMany(type => UserChannelMessage, userAndChannel => userAndChannel.user)
-  messageBelongs: UserChannelMessage[]
+  messageBelongs: UserChannelMessage[];
 
   /* 用户频道定位关联 */
   @OneToMany(type => UserGroupRole, groupRoles => groupRoles.user)
-  groupRoles: UserGroupRole[]
+  groupRoles: UserGroupRole[];
 
   @ManyToMany(type => Post, post => post.likedUsers)
-  likedPosts: Post[]
+  likedPosts: Post[];
 
   @ManyToMany(type => Post, post => post.dislikedUsers)
-  dislikedPosts: Post[]
-
+  dislikedPosts: Post[];
 
   validatePassword(plainPassword: string): boolean {
     return bcrypt.compareSync(plainPassword, this.password);
