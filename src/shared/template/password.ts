@@ -1782,7 +1782,7 @@ export const password = (link: string): string => `
                                 </table>
 
                                 <center data-parsed="">
-                                  <img src="https://static.hdslb.com/images/member/noface.gif" align="center" class="float-center">
+                                  <img src="http://7xrc2h.com1.z0.glb.clouddn.com/hanbao1.png" align="center" class="float-center">
                                 </center>
 
                                 <table class="spacer">

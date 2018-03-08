@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as path from 'path';
+import * as cors from 'cors';
 import { NestFactory } from '@nestjs/core';
 import { ApplicationModule } from './app.module';
 import { JSONInterceptor } from './utils/json.interceptor';
@@ -16,6 +17,7 @@ async function bootstrap() {
     .setBasePath('/api/v1')
     .setDescription('The Hanbao API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/doc', app, document);
@@ -23,7 +25,9 @@ async function bootstrap() {
   app.use('/static', express.static(path.resolve(__dirname, '../public')));
 
   app.useGlobalFilters(new AnyExceptionFilter());
-  app.useGlobalInterceptors(new JSONInterceptor ());
+  app.useGlobalInterceptors(new JSONInterceptor());
+
+  if (process.env.NODE_ENV !== 'production') app.use(cors());
 
 	await app.listen(3000);
 }

@@ -7,7 +7,8 @@ import {
   Body,
   UsePipes,
   Query,
-  NotFoundException
+  NotFoundException,
+  BadRequestException
 } from '@nestjs/common';
 
 import {
@@ -24,7 +25,8 @@ import {
   UserBaseInformation,
   PasswordDto,
   EmailDto,
-  ResetPasswordDto
+  ResetPasswordDto,
+  RegisterValidationDto
 } from './user.dto';
 
 import { User } from '../utils/decorator'
@@ -53,6 +55,14 @@ export class UserController {
     return '邮件已发送，请检查邮箱';
   }
 
+  @Post('/validate')
+  @ApiOperation({title: '验证注册账号信息'})
+  @UsePipes(new UserValidationPipe())
+  async validate(@Body() account: RegisterValidationDto) {
+    if (isEmpty(account)) throw new BadRequestException()
+    await this.userService.validateUser(account);
+  }
+
   @Get('/register')
   @ApiOperation({title: '生成用户账号', description: '从邮件中地址跳转后，创建真实的用户'})  
   @ApiImplicitQuery({ name: 'userKey', description: '邮箱hash之后的key', required: true, type: String })
@@ -62,12 +72,14 @@ export class UserController {
   }
 
   @Get('/profile')
+  @ApiOperation({title: '获取用户资料' })  
   @ApiBearerAuth()
   async getProfile(@User() user: UserBaseInformation) {
     return await this.userService.getProfile(user);
   }
 
   @Patch('/profile')
+  @ApiOperation({title: '更新用户资料' })
   @ApiBearerAuth()
   @UsePipes(new UserValidationPipe())
   async updateProfile(@Body() profile: UserProfileDto, @User() user: UserBaseInformation) {
@@ -76,6 +88,7 @@ export class UserController {
   }
 
   @Patch('/password')
+  @ApiOperation({title: '更新密码' })
   @ApiBearerAuth()
   @UsePipes(new UserValidationPipe())
   async updatePassword(@Body() pwd: PasswordDto, @User() user: UserBaseInformation) {
@@ -83,6 +96,7 @@ export class UserController {
   }
 
   @Post('/password')
+  @ApiOperation({title: '申请重置密码' })
   @UsePipes(new UserValidationPipe())  
   async resetPassword(@Body() mail: EmailDto) {
     await this.userService.sendResetMail(mail.email);
@@ -90,6 +104,7 @@ export class UserController {
   }
 
   @Post('/reset')
+  @ApiOperation({title: '重置密码请求' })  
   @UsePipes(new UserValidationPipe())  
   async resetAccount(@Body() pwd: ResetPasswordDto) {
     await this.userService.resetAccount(pwd);

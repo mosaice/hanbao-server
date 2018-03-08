@@ -17,7 +17,7 @@ const ormconfig = {
     maxQueryExecutionTime: 1000,
     debug: false,
     trace: false,
-    synchronize: { force: true },
+    synchronize: true,
   },
   prod: {
     ...baseConfig,    

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "start:watch": "nodemon",
+    "dev": "nodemon",
     "prestart:prod": "tsc",
     "start:prod": "node dist/main.js"
   },
@@ -19,6 +19,7 @@
     "@nestjs/websockets": "^4.5.8",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.8.1",
+    "cors": "^2.8.4",
     "jsonwebtoken": "^8.1.1",
     "lodash": "^4.17.5",
     "mysql": "^2.15.0",
@@ -36,6 +37,7 @@
     "@types/lodash": "^4.14.104",
     "@types/node": "^9.4.6",
     "nodemon": "^1.15.1",
-    "ts-node": "^5.0.0"
+    "ts-node": "^5.0.0",
+    "tslint-config-prettier": "^1.9.0"
   }
 }

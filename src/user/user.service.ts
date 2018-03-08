@@ -16,7 +16,8 @@ import {
   UserProfileDto,
   UserBaseInformation,
   PasswordDto,
-  ResetPasswordDto
+  ResetPasswordDto,
+  RegisterValidationDto
 } from './user.dto';
 
 @Component()
@@ -118,10 +119,9 @@ export class UserService {
     if (user) {
       const hash = this.bcrypt.hash(email);
       this.redis.redisClient.set(hash, email, 'EX', 1800);
-
       this.mailClient.passwordMail({
         to: email,
-        link: `http://localhost:3000/api/v1/user/reset?userKey=${qs.escape(hash)}`
+        link: `http://localhost:4200/user/reset?userKey=${qs.escape(hash)}`
       })
     }
   }
@@ -130,9 +130,34 @@ export class UserService {
     const email = await this.redis.getAsync(qs.unescape(pwd.userKey));
 
     if (!email) throw new NotFoundException('userKey not found');
-
+    this.redis.redisClient.del(qs.unescape(pwd.userKey));
     await this.userRepository.update({ email },{
       password: this.bcrypt.hash(pwd.password)
     });
+  }
+
+  async validateUser(account: RegisterValidationDto) {
+    // const checkUser = await this.userRepository
+    //   .createQueryBuilder('user')
+    //   .where('user.email = :email', account.email || '')
+    //   .orWhere('user.name = :name', account.name)
+    //   .getOne();
+
+    let checkMail, checkName;
+    if (account.email) {
+      checkMail = await this.userRepository.findOne({
+        where: { email: account.email }
+      })
+
+      if (checkMail) throw new BadRequestException('Email or Name exist !')
+    }
+
+    if (account.name) {
+      checkName = await this.userRepository.findOne({
+        where: { name: account.name }
+      })
+
+      if (checkName) throw new BadRequestException('Email or Name exist !')
+    }
   }
 }

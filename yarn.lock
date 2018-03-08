@@ -605,7 +605,7 @@ core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "http://registry.npm.taobao.org/core-util-is/download/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
-cors@2.8.4:
+cors@2.8.4, cors@^2.8.4:
   version "2.8.4"
   resolved "http://registry.npm.taobao.org/cors/download/cors-2.8.4.tgz#2bd381f2eb201020105cd50ea59da63090694686"
   dependencies:
@@ -2923,6 +2923,10 @@ ts-node@^5.0.0:
     mkdirp "^0.5.1"
     source-map-support "^0.5.3"
     yn "^2.0.0"
+
+tslint-config-prettier@^1.9.0:
+  version "1.9.0"
+  resolved "http://registry.npm.taobao.org/tslint-config-prettier/download/tslint-config-prettier-1.9.0.tgz#391887644b66de4623f745a6c85672405cbcdcee"
 
 tunnel-agent@^0.6.0:
   version "0.6.0"
