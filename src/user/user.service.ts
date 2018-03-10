@@ -1,6 +1,6 @@
 import { Component, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, getConnection } from 'typeorm';
 import * as qs from 'querystring';
 
 import { MailService } from '../shared/mail.service';
@@ -9,6 +9,9 @@ import { RedisService } from '../shared/redis.service';
 import { AuthService } from '../auth/auth.service';
 
 import { User } from '../../ORM/entity/User';
+import { UserGroupRole } from '../../ORM/entity/UserGroupRole';
+import { UserGroup } from '../../ORM/entity/UserGroup';
+import { Role } from '../../ORM/entity/Role';
 
 import {
   CreateUserDto,
@@ -25,6 +28,12 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
+    @InjectRepository(UserGroup)
+    private readonly groupRepository: Repository<UserGroup>,
+    @InjectRepository(UserGroupRole)
+    private readonly roleRelationRepository: Repository<UserGroupRole>,
     private mailClient: MailService,
     private authService: AuthService,
     private bcrypt: BcryptService,
@@ -55,12 +64,33 @@ export class UserService {
 
     if (!userString) throw new NotFoundException('userKey not found');
 
-    const createUserDto = JSON.parse(userString);
+    const createUserDto: CreateUserDto = JSON.parse(userString);
 
     this.redis.redisClient.del(qs.unescape(key));
 
-    const user = await this.userRepository.create(createUserDto);
-    await this.userRepository.save(user);
+    await getConnection().transaction(async transactionalEntityManager => {
+
+      const user = await this.userRepository.create(createUserDto);
+      await transactionalEntityManager.save(user);
+
+      const group = await this.groupRepository.create({
+        viewPermission: 'public',
+        name: `${user.name}'s group`,
+        description: `${user.name}'s group`,
+      });
+      await transactionalEntityManager.save(group);
+
+      const groupAdmin = await this.roleRepository.findOne({
+        where: { name: 'privateOwner' },
+      });
+
+      const roleRelation = await this.roleRelationRepository.create({
+        user,
+        group,
+        role: groupAdmin,
+      });
+      await transactionalEntityManager.save(roleRelation);
+    });
   }
 
   async signIn(account: AccountDto) {
@@ -137,11 +167,6 @@ export class UserService {
   }
 
   async validateUser(account: RegisterValidationDto) {
-    // const checkUser = await this.userRepository
-    //   .createQueryBuilder('user')
-    //   .where('user.email = :email', account.email || '')
-    //   .orWhere('user.name = :name', account.name)
-    //   .getOne();
 
     let checkMail, checkName;
     if (account.email) {

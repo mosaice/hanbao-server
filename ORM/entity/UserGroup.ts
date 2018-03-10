@@ -37,7 +37,7 @@ export class UserGroup extends BaseEntity {
   @OneToMany(type => Post, post => post.owner)
   posts: Post[];
 
-  /* 文章归属 */
+  /* 角色归属 */
   @OneToMany(type => UserGroupRole, userRole => userRole.group)
   userRoles: UserGroupRole[];
 

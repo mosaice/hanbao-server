@@ -21,7 +21,7 @@ export class User extends BaseEntity {
   @Index({ unique: true })
   @Column({
     type: 'varchar',
-          length: 50,
+    length: 50,
     comment: '注册登陆用邮箱',
   })
   email: string;

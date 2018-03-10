@@ -3,6 +3,7 @@ BEGIN;
 INSERT INTO `role` (`id`, `createAt`, `updateAt`, `name`, `childId`, `grantId`) VALUES ('1', '2018-02-17 16:00:00', '2018-02-17 16:00:00', 'regular', NULL, NULL);
 INSERT INTO `role` (`id`, `createAt`, `updateAt`, `name`, `childId`, `grantId`) VALUES ('2', '2018-02-17 16:00:00', '2018-02-17 16:00:00', 'admin', '1', '1');
 INSERT INTO `role` (`id`, `createAt`, `updateAt`, `name`, `childId`, `grantId`) VALUES ('3', '2018-02-17 16:00:00', '2018-02-17 16:00:00', 'owner', '2', '2');
+INSERT INTO `role` (`id`, `createAt`, `updateAt`, `name`, `childId`, `grantId`) VALUES ('4', '2018-02-17 16:00:00', '2018-02-17 16:00:00', 'privateOwner', '2', '1');
 
 /* resources */
 INSERT INTO `resource` (`id`, `createAt`, `updateAt`, `type`, `module`, `name`) VALUES ('1', '2017-01-17 22:39:45', '2017-01-17 22:39:45', 'access', 'group', 'post');

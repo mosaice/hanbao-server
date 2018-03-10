@@ -1,5 +1,6 @@
 const baseConfig = {
   type: 'mysql',
+  charset: 'utf8mb4',
   entities: ['ORM/entity/**/*.ts'],
   migrations: ['ORM/migration/**/*.ts'],
   subscribers: ['ORM/subscriber/**/*.ts'],

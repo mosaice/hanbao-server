@@ -69,6 +69,7 @@ export class UserController {
   async registerAccount(@Query('userKey') key: string) {
     if (!key) throw new NotFoundException('userKey not found');
     await this.userService.createUser(key);
+    return '注册成功';
   }
 
   @Get('/profile')
