@@ -30,7 +30,7 @@ import {
 } from './user.dto';
 
 import { User } from '../utils/decorator';
-import { UserValidationPipe } from './user.validationPipe';
+import { ValidationPipe } from '../utils/validation.Pipe';
 import { UserService } from './user.service';
 
 @ApiUseTags('user')
@@ -42,14 +42,14 @@ export class UserController {
 
   @Post('/signin')
   @ApiOperation({title: '账号登陆', description: '登陆获取个人信息和jwtoken'})
-  @UsePipes(new UserValidationPipe())
+  @UsePipes(new ValidationPipe())
 	async findAll(@Body() account: AccountDto) {
     return await this.userService.signIn(account);
   }
 
   @Post()
   @ApiOperation({title: '注册账号', description: '提交资料后只发送确认邮件'})
-  @UsePipes(new UserValidationPipe())
+  @UsePipes(new ValidationPipe())
   async create(@Body() createUserDto: CreateUserDto) {
     await this.userService.registerUser(createUserDto);
     return '邮件已发送，请检查邮箱';
@@ -57,7 +57,7 @@ export class UserController {
 
   @Post('/validate')
   @ApiOperation({title: '验证注册账号信息'})
-  @UsePipes(new UserValidationPipe())
+  @UsePipes(new ValidationPipe())
   async validate(@Body() account: RegisterValidationDto) {
     if (isEmpty(account)) throw new BadRequestException();
     await this.userService.validateUser(account);
@@ -82,7 +82,7 @@ export class UserController {
   @Patch('/profile')
   @ApiOperation({title: '更新用户资料' })
   @ApiBearerAuth()
-  @UsePipes(new UserValidationPipe())
+  @UsePipes(new ValidationPipe())
   async updateProfile(@Body() profile: UserProfileDto, @User() user: UserBaseInformation) {
     if (isEmpty(profile)) return;
     await this.userService.updateProfile(user, profile);
@@ -91,14 +91,14 @@ export class UserController {
   @Patch('/password')
   @ApiOperation({title: '更新密码' })
   @ApiBearerAuth()
-  @UsePipes(new UserValidationPipe())
+  @UsePipes(new ValidationPipe())
   async updatePassword(@Body() pwd: PasswordDto, @User() user: UserBaseInformation) {
     await this.userService.updatePassword(user, pwd);
   }
 
   @Post('/password')
   @ApiOperation({title: '申请重置密码' })
-  @UsePipes(new UserValidationPipe())
+  @UsePipes(new ValidationPipe())
   async resetPassword(@Body() mail: EmailDto) {
     await this.userService.sendResetMail(mail.email);
     return '邮件已发送，请检查邮箱';
@@ -106,7 +106,7 @@ export class UserController {
 
   @Post('/reset')
   @ApiOperation({title: '重置密码请求' })
-  @UsePipes(new UserValidationPipe())
+  @UsePipes(new ValidationPipe())
   async resetAccount(@Body() pwd: ResetPasswordDto) {
     await this.userService.resetAccount(pwd);
   }

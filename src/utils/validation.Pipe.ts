@@ -3,18 +3,12 @@ import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 
 @Pipe()
-export class UserValidationPipe implements PipeTransform<any> {
+export class ValidationPipe implements PipeTransform<any> {
   async transform(value, metadata: ArgumentMetadata) {
     const { metatype } = metadata;
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
-
-    // try {
-    //   value.password = new Buffer(value.password, 'base64').toString('binary');
-    // } catch (error) {
-    //   throw new BadRequestException('Password format error');
-    // }
 
     const object = plainToClass(metatype, value);
     const errors = await validate(object, { validationError: { target: false }});
