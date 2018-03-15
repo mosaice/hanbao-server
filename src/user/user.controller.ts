@@ -7,7 +7,6 @@ import {
   Body,
   UsePipes,
   Query,
-  NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
 
@@ -43,7 +42,7 @@ export class UserController {
   @Post('/signin')
   @ApiOperation({title: '账号登陆', description: '登陆获取个人信息和jwtoken'})
   @UsePipes(new ValidationPipe())
-	async findAll(@Body() account: AccountDto) {
+	async signIn(@Body() account: AccountDto) {
     return await this.userService.signIn(account);
   }
 
@@ -67,7 +66,6 @@ export class UserController {
   @ApiOperation({title: '生成用户账号', description: '从邮件中地址跳转后，创建真实的用户'})
   @ApiImplicitQuery({ name: 'userKey', description: '邮箱hash之后的key', required: true, type: String })
   async registerAccount(@Query('userKey') key: string) {
-    if (!key) throw new NotFoundException('userKey not found');
     await this.userService.createUser(key);
     return '注册成功';
   }
