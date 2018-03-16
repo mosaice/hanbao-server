@@ -16,7 +16,7 @@ describe('UserController', () => {
   let userController: UserController;
   let userService: UserService;
 
-  beforeEach(() => {
+  beforeAll(() => {
     userService = new UserService(
       {} as Repository<User>,
       {} as Repository<Role>,
