@@ -39,9 +39,26 @@ const ormconfig = {
     },
     synchronize: false,
   },
+  test: {
+    ...baseConfig,
+    host: 'localhost',
+    port: 3306,
+    name: 'TestDB',
+    username: 'root',
+    password: '321',
+    database: 'hanbaoTest',
+    logging: ['error'],
+    synchronize: true,
+    dropSchema : true,
+  },
 };
 
 export default () => {
-  const ENV: string = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
-  return ormconfig[ENV];
+  const configMapping = {
+    production: ormconfig.prod,
+    test: ormconfig.test,
+    dev: ormconfig.dev,
+  };
+
+  return configMapping[process.env.NODE_ENV!] || ormconfig.dev;
 };

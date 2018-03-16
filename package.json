@@ -8,11 +8,11 @@
 		"dev": "nodemon",
 		"prestart:prod": "tsc",
 		"start:prod": "node dist/main.js",
-		"test": "jest --config=jest.json",
-		"test:watch": "jest --watch --config=jest.json",
-		"test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
-		"e2e": "jest --config=e2e/jest-e2e.json --forceExit",
-		"e2e:watch": "jest --watch --config=e2e/jest-e2e.json"
+		"test": "NODE_ENV=test jest --config=jest.json",
+		"test:watch": "NODE_ENV=test jest --watch --config=jest.json",
+		"test:coverage": "NODE_ENV=test jest --config=jest.json --coverage --coverageDirectory=coverage",
+		"e2e": "NODE_ENV=test jest --config=e2e/jest-e2e.json --forceExit",
+		"e2e:watch": "NODE_ENV=test jest --watch --config=e2e/jest-e2e.json"
 	},
 	"dependencies": {
 		"@nestjs/common": "^4.6.6",

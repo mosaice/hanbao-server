@@ -1,22 +1,21 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { Test } from '@nestjs/testing';
 import { TestingModule } from '@nestjs/testing/testing-module';
-import { Repository } from 'typeorm';
+import { Repository, getConnection } from 'typeorm';
+import getOrmConfig from '../../ORM/config';
+
 import { User } from '../../ORM/entity/User';
-import { UserGroupRole } from '../../ORM/entity/UserGroupRole';
-import { UserGroup } from '../../ORM/entity/UserGroup';
 import { Role } from '../../ORM/entity/Role';
+import { UserGroup } from '../../ORM/entity/UserGroup';
+import { UserGroupRole } from '../../ORM/entity/UserGroupRole';
 
 import { MailService } from '../shared/mail.service';
 import { BcryptService } from '../shared/bcrypt.service';
 import { RedisService } from '../shared/redis.service';
 import { AuthService } from '../auth/auth.service';
-jest.mock('../shared/mail.service');
-jest.mock('../shared/bcrypt.service');
-jest.mock('../shared/redis.service');
-jest.mock('../auth/auth.service');
+import * as redis from 'redis';
 
 describe('UserController', () => {
   let userService: UserService;
@@ -26,7 +25,7 @@ describe('UserController', () => {
   };
 
   const bcryptService = {
-    hash: jest.fn().mockImplementation(() => 'some hash'),
+    hash: jest.fn().mockImplementation(() => 'somehash'),
   };
 
   const redisService = {
@@ -41,98 +40,77 @@ describe('UserController', () => {
     },
   };
 
-  let authService: AuthService;
+  const authService = {};
 
-  // class UserRepository extends Repository<User> {}
-  // class RoleRepository extends Repository<Role> {}
-  // class UserGroupRepository extends Repository<UserGroup> {}
-  // class UserGroupRoleRepository extends Repository<UserGroupRole> {}
-
-  const userRepository = {};
-  const roleRepository = {};
-  const userGroupRepository = {};
-  const userGroupRoleRepository = {};
   const redisStore = {};
+
+  let userRepository: Repository<User>;
+  let roleRepository: Repository<Role>;
+  let userGroupRepository: Repository<UserGroup>;
+  let userGroupRoleRepository: Repository<UserGroupRole>;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       components: [
         UserService,
-        BcryptService,
-        AuthService,
-        MailService,
-        RedisService,
         {
-          provide: 'UserRepository',
-          useValue: userRepository as Repository<User>,
+          provide: AuthService,
+          useValue: authService,
         },
         {
-          provide: 'RoleRepository',
-          useValue: roleRepository as Repository<Role>,
+          provide: BcryptService,
+          useValue: bcryptService,
         },
         {
-          provide: 'UserGroupRepository',
-          useValue: userGroupRepository as Repository<UserGroup>,
+          provide: MailService,
+          useValue: mailService,
         },
         {
-          provide: 'UserGroupRoleRepository',
-          useValue: userGroupRoleRepository as Repository<UserGroupRole>,
+          provide: RedisService,
+          useValue: redisService,
         },
+      ],
+      imports: [
+        TypeOrmModule.forRoot(getOrmConfig()),
+        TypeOrmModule.forFeature([
+          User,
+          UserGroupRole,
+          UserGroup,
+          Role,
+        ]),
       ],
     }).compile();
 
     userService = module.get<UserService>(UserService);
+    userRepository = getConnection('TestDB').getRepository<User>(User);
+    roleRepository = getConnection('TestDB').getRepository<Role>(Role);
+    userGroupRepository = getConnection('TestDB').getRepository<UserGroup>(UserGroup);
+    userGroupRoleRepository = getConnection('TestDB').getRepository<UserGroupRole>(UserGroupRole);
+  });
 
-    // redisService = module.get<RedisService>(RedisService);
-    authService = module.get<AuthService>(AuthService);
-
-    // userRepository = module.get<UserRepository>(UserRepository);
-    // roleRepository = module.get<RoleRepository>(RoleRepository);
-    // userGroupRepository = module.get<UserGroupRepository>(UserGroupRepository);
-    // userGroupRoleRepository = module.get<UserGroupRoleRepository>(UserGroupRoleRepository);
+  afterEach(async () => {
+    await userRepository.query('DELETE FROM user');
+    await userRepository.query('DELETE FROM role');
+    await userRepository.query('DELETE FROM user_group');
+    await userRepository.query('DELETE FROM user_group_role');
+    // await roleRepository.query('DELETE FROM user');
+    // await userGroupRepository.query('DELETE FROM user');
+    // await userGroupRoleRepository.query('DELETE FROM user');
   });
 
   describe('setup', () => {
     it('should all service be defined', async () => {
       expect(userService).toBeDefined();
-      expect(mailService).toBeDefined();
-      expect(bcryptService).toBeDefined();
-      expect(redisService).toBeDefined();
-      expect(authService).toBeDefined();
     });
   });
 
   describe('registerUser', () => {
-    const account = { email: 'test', name: 'test', password: 'test'};
+    const account = { email: 'test@test.com', name: 'test', password: '123456789'};
 
-    interface QueryBuild {
-      createQueryBuilder: any;
-      where: any;
-      orWhere: any;
-      getOne: any;
-    }
-
-    beforeAll(() => {
-      (userRepository as QueryBuild).createQueryBuilder = jest.fn().mockImplementation(() => userRepository);
-      (userRepository as QueryBuild).where = jest.fn().mockImplementation(() => userRepository);
-      (userRepository as QueryBuild).orWhere = jest.fn().mockImplementation(() => userRepository);
-    });
-
-    it('should throw error', async () => {
-      (userRepository as QueryBuild).getOne = jest.fn().mockImplementation(() => Promise.resolve({ user: 'test'}));
-
+    it('should throw error when email exit', async () => {
+      const testUser = await userRepository.create({ email: 'test@test.com', name: 'no test', password: '123456789'});
+      await userRepository.save(testUser);
       userService.registerUser(account).catch(e => {
-        expect((userRepository as QueryBuild).createQueryBuilder).toHaveBeenCalledTimes(1);
-        expect((userRepository as QueryBuild).createQueryBuilder).toHaveBeenCalledWith('user');
-
-        expect((userRepository as QueryBuild).where).toHaveBeenCalledTimes(1);
-        expect((userRepository as QueryBuild).where).toHaveBeenCalledWith('user.email = :email', account);
-
-        expect((userRepository as QueryBuild).where).toHaveBeenCalledTimes(1);
-        expect((userRepository as QueryBuild).orWhere).toHaveBeenCalledWith('user.name = :name', account);
-
-        expect((userRepository as QueryBuild).getOne).toHaveBeenCalledTimes(1);
-
         expect(e.message).toEqual(
           { statusCode: 400,
             error: 'Bad Request',
@@ -141,17 +119,28 @@ describe('UserController', () => {
 
     });
 
-    it('should send email and save hash key', async () => {
-      (userRepository as QueryBuild).getOne = jest.fn().mockImplementation(() => Promise.resolve());
-
-      userService.registerUser(account).then(() => {
-        expect(bcryptService.hash).toHaveBeenCalledTimes(1);
-        expect(bcryptService.hash).toHaveBeenCalledWith('test');
-
+    it('should throw error when name exit', async () => {
+      const testUser = await userRepository.create({ email: 'notest@test.com', name: 'test', password: '123456789'});
+      await userRepository.save(testUser);
+      userService.registerUser(account).catch(e => {
+        expect(e.message).toEqual(
+          { statusCode: 400,
+            error: 'Bad Request',
+            message: 'Email or Name exist !' });
       });
-
     });
 
+    it('should send register email with hash key', async () => {
+      userService.registerUser(account).then(data => {
+        expect(data).toBeUndefined();
+        expect(bcryptService.hash).toBeCalledWith('test@test.com');
+        expect(redisService.redisClient.set).toBeCalledWith('somehash', JSON.stringify(account), 'EX', 1800);
+        expect(mailService.registerMail).toBeCalledWith({
+          to: 'test@test.com',
+          link: 'http://localhost:3000/api/v1/user/register?userKey=somehash',
+        });
+      });
+    });
   });
 
 });

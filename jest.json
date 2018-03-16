@@ -1,5 +1,8 @@
 {
-  "moduleFileExtensions": [
+    "setupFiles": [
+        "<rootDir>/test_helper.ts"
+    ],
+    "moduleFileExtensions": [
         "ts",
         "tsx",
         "js",
@@ -9,11 +12,11 @@
         "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "/src/.*\\.(test|spec).(ts|tsx|js)$",
-    "collectCoverageFrom" : [
-      "!src/**/*.d.{js,ts}",
-      "src/**/*.{js,jsx,tsx,ts}",
-      "!**/node_modules/**",
-      "!**/vendor/**"
+    "collectCoverageFrom": [
+        "!src/**/*.d.{js,ts}",
+        "src/**/*.{js,jsx,tsx,ts}",
+        "!**/node_modules/**",
+        "!**/vendor/**"
     ],
     "coverageReporters": ["json", "lcov"]
 }
