@@ -13,7 +13,6 @@ addons:
       - mysql-client
 before_install:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS hanbaoTest default character set utf8mb4 collate utf8mb4_unicode_ci;'
-  - rm package-lock.json yarn.lock
 script:
   - npm test
   - npm run e2e
