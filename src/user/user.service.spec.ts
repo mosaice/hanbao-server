@@ -97,7 +97,7 @@ describe('UserController', () => {
   });
 
   describe('setup', () => {
-    it('should all service be defined', async () => {
+    it('should all service be defined', () => {
       expect(userService).toBeDefined();
     });
   });
@@ -114,7 +114,6 @@ describe('UserController', () => {
             error: 'Bad Request',
             message: 'Email or Name exist !' });
       });
-
     });
 
     it('should throw error when name exit', async () => {
