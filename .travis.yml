@@ -11,6 +11,7 @@ addons:
       - mysql-client
 before_install:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS hanbaoTest;'
+  - rm package-lock.json yarn.lock
 script:
   - npm test
   - npm run e2e
