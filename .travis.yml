@@ -1,5 +1,7 @@
 language: node_js
 sudo: required
+services:
+  - redis-server
 node_js:
   - '8'
 addons:
@@ -10,7 +12,7 @@ addons:
       - mysql-server
       - mysql-client
 before_install:
-  - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS hanbaoTest;'
+  - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS hanbaoTest default character set utf8mb4 collate utf8mb4_unicode_ci;'
   - rm package-lock.json yarn.lock
 script:
   - npm test

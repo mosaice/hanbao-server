@@ -21,3 +21,5 @@ npm-debug.log
 /dist
 
 setup.js
+package-lock.json
+yarn.lock
