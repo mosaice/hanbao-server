@@ -8,7 +8,7 @@
 		"dev": "nodemon",
 		"prestart:prod": "tsc",
 		"start:prod": "node dist/main.js",
-		"test": "NODE_ENV=test jest --config=jest.json",
+		"test": "NODE_ENV=test jest --config=jest.json --forceExit",
 		"test:watch": "NODE_ENV=test jest --watch --config=jest.json",
 		"test:coverage": "NODE_ENV=test jest --config=jest.json --coverage --coverageDirectory=coverage",
 		"e2e": "NODE_ENV=test jest --config=e2e/jest-e2e.json --forceExit",
