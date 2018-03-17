@@ -10,7 +10,7 @@ export class MailService {
   constructor() {
     this.transporter = nodemailer.createTransport({
       pool: true,
-      host: 'smtp.163.com',
+      host: mailHost,
       port: 465,
       secure: true,
       auth: {
@@ -22,7 +22,7 @@ export class MailService {
 
   registerMail({ to, link }) {
     const message = {
-      from: '"notify"<a309584795@163.com>',
+      from: `"notify"<${mailAccount}>`,
       to,
       subject: 'Welcome to join us!',
       html: register(link),
@@ -41,7 +41,7 @@ export class MailService {
 
   passwordMail({ to, link}) {
     const message = {
-      from: '"notify"<a309584795@163.com>',
+      from: `"notify"<${mailAccount}>`,
       to,
       subject: 'hanbao reset password mail!',
       html: password(link),

@@ -82,10 +82,11 @@ describe('UserController', () => {
     }).compile();
 
     userService = module.get<UserService>(UserService);
-    userRepository = getConnection('TestDB').getRepository<User>(User);
-    roleRepository = getConnection('TestDB').getRepository<Role>(Role);
-    userGroupRepository = getConnection('TestDB').getRepository<UserGroup>(UserGroup);
-    userGroupRoleRepository = getConnection('TestDB').getRepository<UserGroupRole>(UserGroupRole);
+    const connection = getConnection('TestDB');
+    userRepository = connection.getRepository<User>(User);
+    roleRepository = connection.getRepository<Role>(Role);
+    userGroupRepository = connection.getRepository<UserGroup>(UserGroup);
+    userGroupRoleRepository = connection.getRepository<UserGroupRole>(UserGroupRole);
   });
 
   afterEach(async () => {
@@ -93,9 +94,6 @@ describe('UserController', () => {
     await userRepository.query('DELETE FROM role');
     await userRepository.query('DELETE FROM user_group');
     await userRepository.query('DELETE FROM user_group_role');
-    // await roleRepository.query('DELETE FROM user');
-    // await userGroupRepository.query('DELETE FROM user');
-    // await userGroupRoleRepository.query('DELETE FROM user');
   });
 
   describe('setup', () => {
@@ -131,14 +129,12 @@ describe('UserController', () => {
     });
 
     it('should send register email with hash key', async () => {
-      userService.registerUser(account).then(data => {
-        expect(data).toBeUndefined();
-        expect(bcryptService.hash).toBeCalledWith('test@test.com');
-        expect(redisService.redisClient.set).toBeCalledWith('somehash', JSON.stringify(account), 'EX', 1800);
-        expect(mailService.registerMail).toBeCalledWith({
-          to: 'test@test.com',
-          link: 'http://localhost:3000/api/v1/user/register?userKey=somehash',
-        });
+      expect(await userService.registerUser(account)).toBeUndefined();
+      expect(bcryptService.hash).toBeCalledWith('test@test.com');
+      expect(redisService.redisClient.set).toBeCalledWith('somehash', JSON.stringify(account), 'EX', 1800);
+      expect(mailService.registerMail).toBeCalledWith({
+        to: 'test@test.com',
+        link: 'http://localhost:3000/api/v1/user/register?userKey=somehash',
       });
     });
   });
