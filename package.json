@@ -13,7 +13,7 @@
 		"test:coverage": "NODE_ENV=test jest --config=jest.json --coverage --coverageDirectory=coverage",
 		"e2e": "NODE_ENV=test jest --config=e2e/jest-e2e.json --forceExit",
 		"e2e:watch": "NODE_ENV=test jest --watch --config=e2e/jest-e2e.json",
-		"coverage": "npm run test:coverage && cat ./coverage/lcov.info | npx coveralls"		
+		"coverage": "npm run test:coverage && cat ./coverage/lcov.info | npx coveralls"
 	},
 	"dependencies": {
 		"@nestjs/common": "^4.6.6",
@@ -29,7 +29,7 @@
 		"jsonwebtoken": "^8.2.0",
 		"lodash": "^4.17.5",
 		"mysql": "^2.15.0",
-		"nodemailer": "^4.6.2",
+		"nodemailer": "^4.6.3",
 		"passport": "^0.4.0",
 		"passport-jwt": "^4.0.0",
 		"redis": "^2.8.0",
@@ -41,11 +41,11 @@
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.1",
 		"@types/jest": "^22.2.0",
-		"@types/lodash": "^4.14.104",
+		"@types/lodash": "^4.14.105",
 		"@types/node": "^9.4.7",
 		"@types/supertest": "^2.0.4",
 		"coveralls": "^3.0.0",
-		"jest": "^23.0.0-alpha.0",
+		"jest": "^22.4.2",
 		"nodemon": "^1.17.2",
 		"supertest": "^3.0.0",
 		"ts-jest": "^22.4.1",
