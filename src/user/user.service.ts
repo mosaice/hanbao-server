@@ -71,6 +71,7 @@ export class UserService {
     await getConnection().transaction(async transactionalEntityManager => {
 
       const user = await this.userRepository.create(createUserDto);
+
       await transactionalEntityManager.save(user);
 
       const group = await this.groupRepository.create({
@@ -89,6 +90,7 @@ export class UserService {
         group,
         role: groupAdmin,
       });
+
       await transactionalEntityManager.save(roleRelation);
     });
   }
@@ -99,7 +101,7 @@ export class UserService {
     });
 
     if (!user || !user.validatePassword(account.password))
-      throw new BadRequestException('Email or Password error!');
+    throw new BadRequestException('Email or Password error!');
 
     user.loginCount += 1;
     await this.userRepository.updateById(user.id, {
