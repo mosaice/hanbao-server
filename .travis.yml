@@ -12,6 +12,8 @@ addons:
 before_install:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS hanbaoTest;'
   - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('321') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+  - sudo mysql_upgrade
+  - sudo service mysql restart
 script:
   - npm test
   - npm run e2e
