@@ -132,7 +132,7 @@ export class UserService {
   async updatePassword(info: UserBaseInformation, pwd: PasswordDto) {
     const user = await this.userRepository.findOneById(info.id);
 
-    if (!user || !user.validatePassword(pwd.oldPassword) || user.validatePassword(pwd.newPassword))
+    if (!user || !user.validatePassword(pwd.oldPassword))
       throw new BadRequestException('Password invalid!');
 
     await this.userRepository.updateById(user.id, {

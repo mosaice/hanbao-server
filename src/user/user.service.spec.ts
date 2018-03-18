@@ -432,4 +432,49 @@ describe('UserController', () => {
 
     });
   });
+
+  describe('updatePassword', () => {
+
+    it('should return error', async () => {
+      const dto = { id: 16, email: 'test@test.com', name: 'test' };
+
+      const pwd = { oldPassword: '123456789', newPassword: '123456789'};
+
+      userService.updatePassword(dto, pwd).catch(e => {
+        expect(e.message).toEqual(
+          { statusCode: 400,
+            error: 'Bad Request',
+            message: 'Password invalid!',
+          });
+      });
+
+      const testUser = await userRepository.create({ email: 'test@test.com', name: 'test', password: '123456789'});
+      await userRepository.save(testUser);
+
+      userService.updatePassword(dto, pwd).catch(e => {
+        expect(e.message).toEqual(
+          { statusCode: 400,
+            error: 'Bad Request',
+            message: 'Password invalid!',
+          });
+      });
+
+    });
+
+    it('should updatePassword success', async () => {
+      const dto = { id: 17, email: 'test@test.com', name: 'test' };
+      const testUser = await userRepository.create({ email: 'test@test.com', name: 'test', password: '123456789'});
+
+      await userRepository.save(testUser);
+      const pwd = { oldPassword: '123456789', newPassword: '123123123'};
+
+      expect(await userService.updatePassword(dto, pwd)).toBeUndefined();
+      expect(bcryptService.hash).toBeCalledWith('123123123');
+
+      const user = await userRepository.findOneById(17);
+      expect(user.password).toBe('somehash');
+
+    });
+
+  });
 });

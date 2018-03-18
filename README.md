@@ -37,6 +37,12 @@ CREATE DATABASE IF NOT EXISTS hanbao default character set utf8mb4 collate utf8m
 CREATE DATABASE IF NOT EXISTS hanbaoTest default character set utf8mb4 collate utf8mb4_unicode_ci;
 ```
 
+系统有部分初始化数据，在创建好数据库后请将 ORM/seeds 中的 sql 执行
+
+#### 邮箱服务
+
+服务中会使用 [nodemailer](https://github.com/nodemailer/nodemailer) 进行邮件发送，请将 `.setup_temp.js` 改名为 `setup.js` 并将其中的值换成你的配置
+
 ### 安装
 
 ```bash

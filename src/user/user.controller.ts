@@ -80,8 +80,7 @@ export class UserController {
   @Patch('/profile')
   @ApiOperation({title: '更新用户资料' })
   @ApiBearerAuth()
-  @UsePipes(new ValidationPipe())
-  async updateProfile(@Body() profile: UserProfileDto, @User() user: UserBaseInformation) {
+  async updateProfile(@Body(new ValidationPipe()) profile: UserProfileDto, @User() user: UserBaseInformation) {
     if (isEmpty(profile)) return;
     await this.userService.updateProfile(user, profile);
   }
@@ -89,8 +88,7 @@ export class UserController {
   @Patch('/password')
   @ApiOperation({title: '更新密码' })
   @ApiBearerAuth()
-  @UsePipes(new ValidationPipe())
-  async updatePassword(@Body() pwd: PasswordDto, @User() user: UserBaseInformation) {
+  async updatePassword(@Body(new ValidationPipe()) pwd: PasswordDto, @User() user: UserBaseInformation) {
     await this.userService.updatePassword(user, pwd);
   }
 

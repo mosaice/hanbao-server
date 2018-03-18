@@ -55,6 +55,14 @@ describe('UserController', () => {
       const accout = { email: 'test', name: 'test'};
       expect(await userController.validate(accout)).toBeUndefined();
     });
+    it('should throw error', async () => {
+
+      jest.spyOn(userService, 'validateUser').mockImplementation(() => {});
+      const accout = {};
+      userController.validate(accout).catch(e => {
+        expect(e).toBeDefined();
+      });
+    });
   });
 
   describe('registerAccount', () => {

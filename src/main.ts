@@ -10,11 +10,11 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
 	const app = await NestFactory.create(ApplicationModule);
 
- app.setGlobalPrefix('/api/v1');
+ app.setGlobalPrefix('/api');
 
  const options = new DocumentBuilder()
     .setTitle('Hanbao example')
-    .setBasePath('/api/v1')
+    .setBasePath('/api')
     .setDescription('The Hanbao API description')
     .setVersion('1.0')
     .addBearerAuth()
