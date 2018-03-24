@@ -1,0 +1,46 @@
+version: "3"
+services:
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 321
+      MYSQL_USER: travis
+      MYSQL_PASSWORD:
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+
+  db_set:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    command: >
+      bash -c " 
+      mysql -hdb -P3306 -uroot -p321 -e 'CREATE DATABASE IF NOT EXISTS hanbao default character set utf8mb4 collate utf8mb4_unicode_ci; 
+      CREATE DATABASE IF NOT EXISTS hanbaoTest default character set utf8mb4 collate utf8mb4_unicode_ci;
+      use hanbao; source /tmp/setup.sql; use hanbaoTest; source /tmp/setup.sql; '"
+volumes:
+    db_data:
+
+#   web:
+#     build: .
+#     # depends_on:
+#     #   - db_set
+#     #   - redis
+#     volumes:
+#       - ./src:/app/src
+#       - ./ORM:/app/ORM
+#     ports:
+#       - "3000:3000"
+#     command: bash -c "ls . ; echo 1111 ; pwd"
